@@ -1,10 +1,10 @@
 #Admin template based on Angular 15 and <a href="https://github.com/akveo/nebular">Nebular</a>
-NGX Angular Template + Keycloak Configuration
+- Ngx Angular Template + Keycloak Configuration
 
 #Spesification :
-Angular 15.2.10
-Node 14.20.1
-Package manager: npm 6.14.17
+- Angular 15.2.10
+- Node 14.20.1
+- Package manager: npm 6.14.17
 
 #Key features :
 - The most popular and trusted Angular open source dashboard template is out there. Used by hundreds of thousands developers worldwide and Fortune 500 companies\*.
@@ -24,16 +24,16 @@ Package manager: npm 6.14.17
 - 60+ Usage Examples
 
 #Documentation :
-https://akveo.github.io/nebular/docs/components/components-overview
-https://akveo.github.io/eva-icons
-https://akveo.github.io/ngx-admin/docs/guides/backend-integration
+- https://akveo.github.io/nebular/docs/components/components-overview
+- https://akveo.github.io/eva-icons
+- https://akveo.github.io/ngx-admin/docs/guides/backend-integration
 
 #Additional install package :
-npm install file-saver @types/file-saver ngx-filesaver --save
+- npm install file-saver @types/file-saver ngx-filesaver --save
 
 #Run :
->npm i
->ng serve --proxy-config proxy.conf.json
+- npm i
+- ng serve --proxy-config proxy.conf.json
 
 
 
