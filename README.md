@@ -5,6 +5,7 @@
 - Angular 15.2.10
 - Node 14.20.1
 - Package manager: npm 6.14.17
+- Keycloak 22.0.5
 
 #Key features :
 - The most popular and trusted Angular open source dashboard template is out there. Used by hundreds of thousands developers worldwide and Fortune 500 companies\*.
