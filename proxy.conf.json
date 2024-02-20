@@ -1,0 +1,22 @@
+{
+  "/menu/v1": {
+    "target": "https://10.192.78.18/security",
+    "secure": false,
+    "changeOrigin": true  
+  },
+  "/trxProduct/v1": {
+    "target": "https://10.192.78.18/transaction",
+    "secure": false,
+    "changeOrigin": true  
+  },
+  "/trxYearIeMaterial/v1": {
+    "target": "https://localhost/transaction",
+    "secure": false,
+    "changeOrigin": true  
+  },
+  "/refference/v1": {
+    "target": "https://10.192.78.18/staging",
+    "secure": false,
+    "changeOrigin": true  
+  }
+}

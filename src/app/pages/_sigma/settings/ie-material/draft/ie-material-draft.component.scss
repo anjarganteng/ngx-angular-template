@@ -1,0 +1,138 @@
+
+@import '../../../../../@theme/styles/themes';
+
+@include nb-install-component() {
+  .flip-icon {
+    position: absolute;
+    right: 0.5rem;
+    top: 1rem;
+    @include nb-rtl(right, 0rem);
+    @include nb-rtl(left, 0rem);
+    cursor: pointer;
+  }
+
+  ::ng-deep {
+    .front-container {
+      max-width: 100%;
+    }
+
+    .flipped {
+      .back-container {
+        .flip-icon {
+          transform: scaleX(-1);
+        }
+      }
+
+      .front-container {
+        .flip-icon {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .row-upload{
+    margin-top: 0.5rem;
+  }
+
+  .tf-upload{
+    // margin-left: 1rem;
+    margin-right: 0.2rem;
+  }
+
+
+  // ng2-smart-table thead > tr > th > .ng2-smart-table-title {
+  //   font-size: small;
+  //   // padding: 0rem;
+  // }
+
+  // ng2-smart-table thead > tr > th {
+  //   font-size: small;
+  //   // padding: 0rem;
+  // }
+
+  // ng2-smart-table tbody > tr > td {
+  //   font-size: small;
+  //   // padding: 0rem;
+  // }
+
+  ng2-smart-table {
+    ::ng-deep th{
+      padding: 5px 10px 5px 10px ;
+      font-size: small;
+    }
+    ::ng-deep .ng2-smart-title a{
+      font-size: small;
+    }
+    ::ng-deep .ng2-smart-action-add-add{
+      margin: auto;
+      height: 2rem;
+      width: 3.5rem;
+    }
+    ::ng-deep td{
+      font-size: small;
+    }
+  }
+
+
+}
+
+
+.approve-button {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  height: 100%;
+  background-color: #00a65a;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  &:hover {
+    background-color: #008d4c;
+  }
+  &:focus {
+    outline: none;
+  }
+  &:disabled {
+    background-color: #00a65a;
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.reject-button {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  height: 100%;
+  background-color: #dd4b39;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  &:hover {
+    background-color: #c23321;
+  }
+  &:focus {
+    outline: none;
+  }
+  &:disabled {
+    background-color: #dd4b39;
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+

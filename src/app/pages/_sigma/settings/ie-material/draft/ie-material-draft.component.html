@@ -1,0 +1,49 @@
+<nb-flip-card [showToggleButton]="false" [flipped]="flipped">
+  <nb-card-front>
+      <nb-card>
+          <nb-card-header>
+              IE Material Draft
+              <nb-icon icon="chevron-right-outline" pack="eva" class="flip-icon" (click)="toggleView()"></nb-icon>
+          </nb-card-header>
+          <nb-card-body>
+              <ng2-smart-table [settings]="settings"
+                                [source]="source"
+                                (editConfirm)="onEditConfirm($event)"
+                                (deleteConfirm)="onDeleteConfirm($event)"
+                                (custom)="onCustomAction($event)">
+              </ng2-smart-table>
+          </nb-card-body>
+      </nb-card>
+  </nb-card-front>
+  <nb-card-back>
+    <nb-card>
+      <nb-card-header>
+          Product Upload <nb-icon icon="chevron-right-outline" pack="eva" class="flip-icon" (click)="toggleView()"></nb-icon>
+      </nb-card-header>
+      <nb-card-body>
+          <div class="row">
+              <div class="col-md-2" style="align-self: center;">
+                  Download Excel Product
+              </div>
+              <div class="col-md-4 row">
+                  <span style="align-self: center;">:&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                  <button nbButton size="small" status="primary" class="bt-download"><nb-icon icon="cloud-download-outline"></nb-icon></button>
+              </div>
+          </div>
+          <div class="row row-upload">
+              <div class="col-md-2" style="align-self: center;">
+                  Upload Excel Product
+              </div>
+              <div class="col-md-4 row">
+                  <span style="align-self: center;">:&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                  <input nbInput fieldSize="small" type="text" placeholder="Browse file" class="tf-upload"/>
+                  <button nbButton size="small" status="primary" class="bt-upload"><nb-icon icon="cloud-upload-outline"></nb-icon></button>
+              </div>
+          </div>
+      </nb-card-body>
+    </nb-card>
+  </nb-card-back>
+</nb-flip-card>
+
+
+

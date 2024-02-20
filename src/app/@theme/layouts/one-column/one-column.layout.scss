@@ -1,0 +1,79 @@
+@import '../../styles/themes';
+@import 'bootstrap/scss/mixins/breakpoints';
+@import '@nebular/theme/styles/global/breakpoints';
+
+@include nb-install-component() {
+  nb-layout-column{
+    background: nb-theme(layout-background-color);
+  }
+
+  .menu-sidebar ::ng-deep .scrollable {
+    // nb-theme(layout-padding-top);
+    // padding-top: 1rem;
+  }
+
+  nb-layout-header{
+    background: nb-theme(background-header);
+    background: nb-theme(background-header-gradient);
+  }
+
+  // nb-layout-footer{
+  //   background: nb-theme(background-footer-gradient);
+  // }
+  
+  .ngx-footer{
+    height: 0.5rem; 
+  }
+  
+  nb-sidebar{
+    transition: width 1s;
+    ::ng-deep .main-container {
+      transition: width 1s;
+    }
+  }
+
+  .content-profile {
+    font-size: nb-theme(layout-text-font-size);
+    font-weight: nb-theme(layout-text-font-weight);
+  }
+
+  .accordion-container{
+    // padding: -10px -10px -10px -10px;
+    margin: -20px -20px 0px -20px;
+    ::ng-deep nb-icon{
+      display: none;
+    }
+  }
+
+  nb-accordion{
+    box-shadow: none;
+  }
+
+  nb-accordion-item-header{
+    padding: 10px 0 10px 10px;
+    font-size: nb-theme(menu-text-font-size);
+    // font-weight: bold;
+  }
+
+  nb-accordion-item-body{
+    ::ng-deep .item-body {
+      padding: 10px 10px 10px 10px;
+      font-size: nb-theme(menu-text-font-size);
+      margin-bottom: 5px;
+    }
+    ::ng-deep .form-accordion{
+      overflow-x: hidden;
+      padding-top: 5px;
+    }
+    ::ng-deep .label-accordion{
+      padding-top: 0px; 
+      padding-right: 0px;
+      padding-bottom: 0px;
+      margin-bottom: 0;
+      margin-top: 4px;
+    }
+  }
+
+  
+
+}

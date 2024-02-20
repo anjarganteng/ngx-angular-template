@@ -1,0 +1,62 @@
+@import '../../../../../@theme/styles/themes';
+
+@include nb-install-component() {
+  .flip-icon {
+    position: absolute;
+    right: 0.5rem;
+    top: 1rem;
+    @include nb-rtl(right, 0rem);
+    @include nb-rtl(left, 0rem);
+    cursor: pointer;
+  }
+  
+  ::ng-deep {
+    .front-container {
+      max-width: 100%;
+    }
+
+    .flipped {
+      .back-container {
+        .flip-icon {
+          transform: scaleX(-1);
+        }
+      }
+
+      .front-container {
+        .flip-icon {
+          display: none;
+        }
+      }
+    }
+    
+    .ng2-smart-action-add-add{
+      margin: auto;
+      height: 2rem; 
+      width: 3rem;
+    }
+  }
+  
+  .ic-flow {
+    margin-right: 2rem;
+    margin-left: 2rem;
+    ::ng-deep svg {
+      vertical-align: text-bottom;
+    }
+  }
+
+  .row-upload{
+    margin-top: 0.5rem;
+  }
+
+  // .bt-download{
+    // margin-left: 1rem;
+  // }
+
+  .tf-upload{
+    // margin-left: 1rem;
+    margin-right: 0.2rem;
+  }
+
+}
+
+

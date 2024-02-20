@@ -1,0 +1,424 @@
+<nb-flip-card [showToggleButton]="false" [flipped]="flipped">
+    <nb-card-front>
+        <nb-card>
+            <nb-card-header>
+                Product List
+                <nb-icon icon="chevron-right-outline" pack="eva" class="flip-icon" (click)="toggleView()"></nb-icon>
+            </nb-card-header>
+            <nb-card-body>
+                <ng2-smart-table [settings]="settings" [source]="sourceProduct"
+                    (create)="actionCreate($event)"
+                    (edit)="actionEdit($event)"
+                >
+                </ng2-smart-table>
+            </nb-card-body>
+        </nb-card>
+    </nb-card-front>
+    <nb-card-back>
+      <nb-card>
+        <nb-card-header>
+            Product Upload <nb-icon icon="chevron-right-outline" pack="eva" class="flip-icon" (click)="toggleView()"></nb-icon>
+        </nb-card-header>
+        <nb-card-body>
+            <div class="row">
+                <div class="col-md-2" style="align-self: center;">
+                    Download Excel Product
+                </div>
+                <div class="col-md-4 row">
+                    <span style="align-self: center;">:&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <button nbButton (click)="getExcelData()" size="small" status="primary" class="bt-download"><nb-icon icon="cloud-download-outline"></nb-icon></button>
+                </div>
+            </div>
+            <div class="row row-upload">
+                <div class="col-md-2" style="align-self: center;">
+                    Upload Excel Product
+                </div>
+                <div class="col-md-4 row">
+                    <span style="align-self: center;">:&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <input nbInput fieldSize="small" type="text" placeholder="Browse file" class="tf-upload"/>
+                    <button nbButton size="small" status="primary" class="bt-upload"><nb-icon icon="cloud-upload-outline"></nb-icon></button>
+                </div>
+            </div>
+        </nb-card-body>
+      </nb-card>
+    </nb-card-back>
+  </nb-flip-card>
+  
+  
+
+<ng-template #dialog let-data let-ref="dialogRef">
+    <nb-card style="width: 1200px; height: 500px;">
+      <nb-card-header>{{dialogTitle}}</nb-card-header>
+      <nb-card-body style="overflow-x: hidden">
+        
+        
+      <!-- <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <label>Name:</label>
+        <input class="form-control" type="text" formControlName="name" required minlength="2" maxlength="20">
+        <label>Email:</label>
+        <input class="form-control" type="email" formControlName="email" required email>
+        <button type="submit">Submit</button>
+      </form> -->
+      <form [formGroup]="formProduct" (ngSubmit)="onSubmit(saveAsType)">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Product Code <span style="color: red;">*</span></label>
+                    <nb-select fullWidth size="small" placeholder="Product Code" formControlName="productCode">
+                        <nb-option *ngFor="let loanType of loanTypes" [value]="loanType.productCode">{{loanType.productCode}} - {{loanType.productName}} </nb-option>
+                    </nb-select>
+                </div>
+                <div class="form-group">
+                    <!-- <label style="vertical-align: middle;">Flag EIR &nbsp;</label> -->
+                    <nb-checkbox formControlName="flagEir" align fullWidth size="small">Flag EIR</nb-checkbox>
+                </div>
+                <div class="form-group">
+                    <label>Prepayment Month</label>
+                    <input type="number" nbInput formControlName="prepaymentMonth" fullWidth placeholder="Prepayment Month" fieldSize="small">
+                </div>
+                <div class="form-group">
+                    <label>Market Rate (%) <span style="color: red;">*</span></label>
+                    <input type="number" nbInput formControlName="marketRate" fullWidth placeholder="Market Rate" fieldSize="small">
+                </div>
+                <div class="form-group">
+                    <label>Spread Rate (%)</label>
+                    <input type="number" nbInput formControlName="spreadRate" fullWidth placeholder="Spread Rate" fieldSize="small">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <nb-card>
+                    <nb-card-body>
+                        <div class="form-group">
+                            <label>GL Income Amortize - Debit</label>
+                            <input nbInput type="text" fieldSize="small" fullWidth placeholder="GL Income Amortize Debit"
+                                formControlName="glIncomeAmortizeDebit"
+                                (focus)="onChange('glIncomeAmortizeDebit')" 
+                                (input)="onChange('glIncomeAmortizeDebit')" 
+                                (focusout)="onRelease('glIncomeAmortizeDebit')"
+                                [nbAutocomplete]="autoGlIncomeAmortizeDebit"/>
+                            <nb-autocomplete #autoGlIncomeAmortizeDebit (selectedChange)="onSelectionChange($event)" fullWidth size="small">
+                                <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.glCode" (click)="resetCb()">
+                                {{option.glCode}} - {{option.glName}} 
+                                </nb-option>
+                            </nb-autocomplete>
+                        </div>
+                        <div class="form-group">
+                            <label>GL Income Amortize - Credit</label>
+                            <input nbInput type="text" fieldSize="small" fullWidth placeholder="GL Income Amortize Credit"
+                                formControlName="glIncomeAmortizeCredit"
+                                (focus)="onChange('glIncomeAmortizeCredit')" 
+                                (input)="onChange('glIncomeAmortizeCredit')" 
+                                (focusout)="onRelease('glIncomeAmortizeCredit')"
+                                [nbAutocomplete]="autoGlIncomeAmortizeCredit"/>
+                            <nb-autocomplete #autoGlIncomeAmortizeCredit (selectedChange)="onSelectionChange($event)" fullWidth size="small">
+                                <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.glCode" (click)="resetCb()">
+                                {{option.glCode}} - {{option.glName}} 
+                                </nb-option>
+                            </nb-autocomplete>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+                <nb-card>
+                    <nb-card-body>
+                        <div class="form-group">
+                            <label>GL Expense Amortize - Debit</label>
+                            <input nbInput type="text" fieldSize="small" fullWidth placeholder="GL Expense Amortize Debit"
+                                formControlName="glExpenseAmortizeDebit"
+                                (focus)="onChange('glExpenseAmortizeDebit')" 
+                                (input)="onChange('glExpenseAmortizeDebit')" 
+                                (focusout)="onRelease('glExpenseAmortizeDebit')"
+                                [nbAutocomplete]="autoGlExpenseAmortizeDebit"/>
+                            <nb-autocomplete #autoGlExpenseAmortizeDebit (selectedChange)="onSelectionChange($event)" fullWidth size="small">
+                                <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.glCode" (click)="resetCb()">
+                                {{option.glCode}} - {{option.glName}} 
+                                </nb-option>
+                            </nb-autocomplete>
+                        </div>
+                        <div class="form-group">
+                            <label>GL Expense Amortize - Credit</label>
+                            <input nbInput type="text" fieldSize="small" fullWidth placeholder="GL Expense Amortize Credit"
+                                formControlName="glExpenseAmortizeCredit"
+                                (focus)="onChange('glExpenseAmortizeCredit')" 
+                                (input)="onChange('glExpenseAmortizeCredit')" 
+                                (focusout)="onRelease('glExpenseAmortizeCredit')"
+                                [nbAutocomplete]="autoGlExpenseAmortizeCredit"/>
+                            <nb-autocomplete #autoGlExpenseAmortizeCredit (selectedChange)="onSelectionChange($event)" fullWidth size="small">
+                                <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.glCode" (click)="resetCb()">
+                                {{option.glCode}} - {{option.glName}} 
+                                </nb-option>
+                            </nb-autocomplete>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+                <nb-card>
+                    <nb-card-body>
+                        <div class="form-group">
+                            <label>GL Uder Market Amortize - Debit</label>
+                            <input nbInput type="text" fieldSize="small" fullWidth placeholder="GL Uder Market Amortize Debit"
+                                formControlName="glUmrateAmortizeDebit"
+                                (focus)="onChange('glUmrateAmortizeDebit')" 
+                                (input)="onChange('glUmrateAmortizeDebit')" 
+                                (focusout)="onRelease('glUmrateAmortizeDebit')"
+                                [nbAutocomplete]="autoGlUmrateAmortizeDebit"/>
+                            <nb-autocomplete #autoGlUmrateAmortizeDebit (selectedChange)="onSelectionChange($event)" fullWidth size="small">
+                                <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.glCode" (click)="resetCb()">
+                                {{option.glCode}} - {{option.glName}} 
+                                </nb-option>
+                            </nb-autocomplete>
+                        </div>
+                        <div class="form-group">
+                            <label>GL Uder Market Amortize - Credit</label>
+                            <input nbInput type="text" fieldSize="small" fullWidth placeholder="GL Uder Market Amortize Credit"
+                                formControlName="glUmrateAmortizeCredit"
+                                (focus)="onChange('glUmrateAmortizeCredit')" 
+                                (input)="onChange('glUmrateAmortizeCredit')" 
+                                (focusout)="onRelease('glUmrateAmortizeCredit')"
+                                [nbAutocomplete]="autoGlUmrateAmortizeCredit"/>
+                            <nb-autocomplete #autoGlUmrateAmortizeCredit (selectedChange)="onSelectionChange($event)" fullWidth size="small">
+                                <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.glCode" (click)="resetCb()">
+                                {{option.glCode}} - {{option.glName}} 
+                                </nb-option>
+                            </nb-autocomplete>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+                <nb-card>
+                    <nb-card-body>
+                        <div class="form-group">
+                            <label>GL Delta Amortize - Debit</label>
+                            <input nbInput type="text" fieldSize="small" fullWidth placeholder="GL Delta Amortize Debit"
+                                formControlName="glDeltaAmortizeDebit"
+                                (focus)="onChange('glDeltaAmortizeDebit')" 
+                                (input)="onChange('glDeltaAmortizeDebit')" 
+                                (focusout)="onRelease('glDeltaAmortizeDebit')"
+                                [nbAutocomplete]="autoGlDeltaAmortizeDebit"/>
+                            <nb-autocomplete #autoGlDeltaAmortizeDebit (selectedChange)="onSelectionChange($event)" fullWidth size="small">
+                                <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.glCode" (click)="resetCb()">
+                                {{option.glCode}} - {{option.glName}} 
+                                </nb-option>
+                            </nb-autocomplete>
+                        </div>
+                        <div class="form-group">
+                            <label>GL Delta Amortize - Credit</label>
+                            <input nbInput type="text" fieldSize="small" fullWidth placeholder="GL Delta Amortize Credit"
+                                formControlName="glDeltaAmortizeCredit"
+                                (focus)="onChange('glDeltaAmortizeCredit')" 
+                                (input)="onChange('glDeltaAmortizeCredit')" 
+                                (focusout)="onRelease('glDeltaAmortizeCredit')"
+                                [nbAutocomplete]="autoGlDeltaAmortizeCredit"/>
+                            <nb-autocomplete #autoGlDeltaAmortizeCredit (selectedChange)="onSelectionChange($event)" fullWidth size="small">
+                                <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.glCode" (click)="resetCb()">
+                                {{option.glCode}} - {{option.glName}} 
+                                </nb-option>
+                            </nb-autocomplete>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+                <nb-card>
+                    <nb-card-body>
+                        <div class="form-group">
+                            <label>GL ECL Collective - Debit</label>
+                            <input nbInput type="text" fieldSize="small" fullWidth placeholder="GL ECL Collective Debit"
+                                formControlName="glEclCollectiveDebit"
+                                (focus)="onChange('glEclCollectiveDebit')" 
+                                (input)="onChange('glEclCollectiveDebit')" 
+                                (focusout)="onRelease('glEclCollectiveDebit')"
+                                [nbAutocomplete]="autoGlEclCollectiveDebit"/>
+                            <nb-autocomplete #autoGlEclCollectiveDebit (selectedChange)="onSelectionChange($event)" fullWidth size="small">
+                                <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.glCode" (click)="resetCb()">
+                                {{option.glCode}} - {{option.glName}} 
+                                </nb-option>
+                            </nb-autocomplete>
+                        </div>
+                        <div class="form-group">
+                            <label>GL ECL Collective - Credit</label>
+                            <input nbInput type="text" fieldSize="small" fullWidth placeholder="GL ECL Collective Credit"
+                                formControlName="glEclCollectiveCredit"
+                                (focus)="onChange('glEclCollectiveCredit')" 
+                                (input)="onChange('glEclCollectiveCredit')" 
+                                (focusout)="onRelease('glEclCollectiveCredit')"
+                                [nbAutocomplete]="autoGlEclCollectiveCredit"/>
+                            <nb-autocomplete #autoGlEclCollectiveCredit (selectedChange)="onSelectionChange($event)" fullWidth size="small">
+                                <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.glCode" (click)="resetCb()">
+                                {{option.glCode}} - {{option.glName}} 
+                                </nb-option>
+                            </nb-autocomplete>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+            <div class="col-md-4">
+                <nb-card>
+                    <nb-card-body>
+                        <div class="form-group">
+                            <label>GL Reversal ECL Collective - Debit</label>                            
+                            <input nbInput type="text" fieldSize="small" fullWidth placeholder="GL Reversal ECL Collective Debit"
+                                formControlName="glReversalEclCollectiveDebit"
+                                (focus)="onChange('glReversalEclCollectiveDebit')" 
+                                (input)="onChange('glReversalEclCollectiveDebit')" 
+                                (focusout)="onRelease('glReversalEclCollectiveDebit')"
+                                [nbAutocomplete]="autoGlReversalEclCollectiveDebit"/>
+                            <nb-autocomplete #autoGlReversalEclCollectiveDebit (selectedChange)="onSelectionChange($event)" fullWidth size="small">
+                                <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.glCode" (click)="resetCb()">
+                                {{option.glCode}} - {{option.glName}} 
+                                </nb-option>
+                            </nb-autocomplete>
+                        </div>
+                        <div class="form-group">
+                            <label>GL Reversal ECL Collective - Credit</label>
+                            <input nbInput type="text" fieldSize="small" fullWidth placeholder="GL Reversal ECL Collective Credit"
+                                formControlName="glReversalEclCollectiveCredit"
+                                (focus)="onChange('glReversalEclCollectiveCredit')" 
+                                (input)="onChange('glReversalEclCollectiveCredit')" 
+                                (focusout)="onRelease('glReversalEclCollectiveCredit')"
+                                [nbAutocomplete]="autoGlReversalEclCollectiveCredit"/>
+                            <nb-autocomplete #autoGlReversalEclCollectiveCredit (selectedChange)="onSelectionChange($event)" fullWidth size="small">
+                                <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.glCode" (click)="resetCb()">
+                                {{option.glCode}} - {{option.glName}} 
+                                </nb-option>
+                            </nb-autocomplete>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+                <nb-card>
+                    <nb-card-body>
+                        <div class="form-group">
+                            <label>GL Unwinding Collective - Debit</label>
+                            <input nbInput type="text" fieldSize="small" fullWidth placeholder="GL Unwinding Collective Debit"
+                                formControlName="glUnwindingCollectiveDebit"
+                                (focus)="onChange('glUnwindingCollectiveDebit')" 
+                                (input)="onChange('glUnwindingCollectiveDebit')" 
+                                (focusout)="onRelease('glUnwindingCollectiveDebit')"
+                                [nbAutocomplete]="autoGlUnwindingCollectiveDebit"/>
+                            <nb-autocomplete #autoGlUnwindingCollectiveDebit (selectedChange)="onSelectionChange($event)" fullWidth size="small">
+                                <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.glCode" (click)="resetCb()">
+                                {{option.glCode}} - {{option.glName}} 
+                                </nb-option>
+                            </nb-autocomplete>
+                        </div>
+                        <div class="form-group">
+                            <label>GL Unwinding Collective - Credit</label>
+                            <input nbInput type="text" fieldSize="small" fullWidth placeholder="GL Unwinding Collective Credit"
+                                formControlName="glUnwindingCollectiveCredit"
+                                (focus)="onChange('glUnwindingCollectiveCredit')" 
+                                (input)="onChange('glUnwindingCollectiveCredit')" 
+                                (focusout)="onRelease('glUnwindingCollectiveCredit')"
+                                [nbAutocomplete]="autoGlUnwindingCollectiveCredit"/>
+                            <nb-autocomplete #autoGlUnwindingCollectiveCredit (selectedChange)="onSelectionChange($event)" fullWidth size="small">
+                                <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.glCode" (click)="resetCb()">
+                                {{option.glCode}} - {{option.glName}} 
+                                </nb-option>
+                            </nb-autocomplete>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+                <nb-card>
+                    <nb-card-body>
+                        <div class="form-group">
+                            <label>GL ECL Individual - Debit</label>
+                            <input nbInput type="text" fieldSize="small" fullWidth placeholder="GL ECL Individual Debit"
+                                formControlName="glEclIndividualDebit"
+                                (focus)="onChange('glEclIndividualDebit')" 
+                                (input)="onChange('glEclIndividualDebit')" 
+                                (focusout)="onRelease('glEclIndividualDebit')"
+                                [nbAutocomplete]="autoGlEclIndividualDebit"/>
+                            <nb-autocomplete #autoGlEclIndividualDebit (selectedChange)="onSelectionChange($event)" fullWidth size="small">
+                                <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.glCode" (click)="resetCb()">
+                                {{option.glCode}} - {{option.glName}} 
+                                </nb-option>
+                            </nb-autocomplete>
+                        </div>
+                        <div class="form-group">
+                            <label>GL ECL Individual - Credit</label>
+                            <input nbInput type="text" fieldSize="small" fullWidth placeholder="GL ECL Individual Credit"
+                                formControlName="glEclIndividualCredit"
+                                (focus)="onChange('glEclIndividualCredit')" 
+                                (input)="onChange('glEclIndividualCredit')" 
+                                (focusout)="onRelease('glEclIndividualCredit')"
+                                [nbAutocomplete]="autoGlEclIndividualCredit"/>
+                            <nb-autocomplete #autoGlEclIndividualCredit (selectedChange)="onSelectionChange($event)" fullWidth size="small">
+                                <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.glCode" (click)="resetCb()">
+                                {{option.glCode}} - {{option.glName}} 
+                                </nb-option>
+                            </nb-autocomplete>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+                <nb-card>
+                    <nb-card-body>
+                        <div class="form-group">
+                            <label>GL Reversal ECL Individual - Debit</label>
+                            <input nbInput type="text" fieldSize="small" fullWidth placeholder="GL Reversal ECL Individual Debit"
+                                formControlName="glReversalEclIndividualDebit"
+                                (focus)="onChange('glReversalEclIndividualDebit')" 
+                                (input)="onChange('glReversalEclIndividualDebit')" 
+                                (focusout)="onRelease('glReversalEclIndividualDebit')"
+                                [nbAutocomplete]="autoGlReversalEclIndividualDebit"/>
+                            <nb-autocomplete #autoGlReversalEclIndividualDebit (selectedChange)="onSelectionChange($event)" fullWidth size="small">
+                                <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.glCode" (click)="resetCb()">
+                                {{option.glCode}} - {{option.glName}} 
+                                </nb-option>
+                            </nb-autocomplete>
+                        </div>
+                        <div class="form-group">
+                            <label>GL Reversal ECL Individual - Credit</label>
+                            <input nbInput type="text" fieldSize="small" fullWidth placeholder="GL Reversal ECL Individual Credit"
+                                formControlName="glReversalEclIndividualCredit"
+                                (focus)="onChange('glReversalEclIndividualCredit')" 
+                                (input)="onChange('glReversalEclIndividualCredit')" 
+                                (focusout)="onRelease('glReversalEclIndividualCredit')"
+                                [nbAutocomplete]="autoGlReversalEclIndividualCredit"/>
+                            <nb-autocomplete #autoGlReversalEclIndividualCredit (selectedChange)="onSelectionChange($event)" fullWidth size="small">
+                                <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.glCode" (click)="resetCb()">
+                                {{option.glCode}} - {{option.glName}} 
+                                </nb-option>
+                            </nb-autocomplete>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+                <nb-card>
+                    <nb-card-body>
+                        <div class="form-group">
+                            <label>GL Unwinding Individual - Debit</label>
+                            <input nbInput type="text" fieldSize="small" fullWidth placeholder="GL Unwinding Individual Debit"
+                                formControlName="glUnwindingIndividualDebit"
+                                (focus)="onChange('glUnwindingIndividualDebit')" 
+                                (input)="onChange('glUnwindingIndividualDebit')" 
+                                (focusout)="onRelease('glUnwindingIndividualDebit')"
+                                [nbAutocomplete]="autoGlUnwindingIndividualDebit"/>
+                            <nb-autocomplete #autoGlUnwindingIndividualDebit (selectedChange)="onSelectionChange($event)" fullWidth size="small">
+                                <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.glCode" (click)="resetCb()">
+                                {{option.glCode}} - {{option.glName}} 
+                                </nb-option>
+                            </nb-autocomplete>
+                        </div>
+                        <div class="form-group">
+                            <label>GL Unwinding Individual - Credit</label>
+                            <input nbInput type="text" fieldSize="small" fullWidth placeholder="GL Unwinding Individual Credit"
+                                formControlName="glUnwindingIndividualCredit"
+                                (focus)="onChange('glUnwindingIndividualCredit')" 
+                                (input)="onChange('glUnwindingIndividualCredit')" 
+                                (focusout)="onRelease('glUnwindingIndividualCredit')"
+                                [nbAutocomplete]="autoGlUnwindingIndividualCredit"/>
+                            <nb-autocomplete #autoGlUnwindingIndividualCredit (selectedChange)="onSelectionChange($event)" fullWidth size="small">
+                                <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option.glCode" (click)="resetCb()">
+                                {{option.glCode}} - {{option.glName}} 
+                                </nb-option>
+                            </nb-autocomplete>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+        </div>
+        <button nbButton type="button" (click)="onSubmit('saveAsSendToApproval')" status="primary" size="small">Send To Approval</button>&nbsp;
+        <button nbButton type="button" (click)="onSubmit('saveAsDraft')" status="warning" size="small">Save As Draft</button>&nbsp;
+        <button nbButton (click)="resetForm()" size="small">Reset</button>
+      </form>
+      </nb-card-body>
+      <nb-card-footer>
+        <button nbButton (click)="ref.close(); resetForm()" size="small">Dismiss</button>
+      </nb-card-footer>
+    </nb-card>
+  </ng-template>
+
+

@@ -1,0 +1,255 @@
+<nb-flip-card [showToggleButton]="false" [flipped]="flipped">
+    <nb-card-front>
+        <nb-card>
+            <nb-card-header>
+                Product Approval
+                <nb-icon icon="chevron-right-outline" pack="eva" class="flip-icon" (click)="toggleView()"></nb-icon>
+            </nb-card-header>
+            <nb-card-body>
+                <ng2-smart-table [settings]="settings" [source]="sourceProduct"
+                    (edit)="actionEdit($event)"
+                >
+                </ng2-smart-table>
+            </nb-card-body>
+        </nb-card>
+    </nb-card-front>
+    <nb-card-back>
+      <nb-card>
+        <nb-card-header>
+            Product Upload <nb-icon icon="chevron-right-outline" pack="eva" class="flip-icon" (click)="toggleView()"></nb-icon>
+        </nb-card-header>
+        <nb-card-body>
+            <div class="row">
+                <div class="col-md-2" style="align-self: center;">
+                    Download Excel Product
+                </div>
+                <div class="col-md-4 row">
+                    <span style="align-self: center;">:&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <button nbButton (click)="getExcelData()" size="small" status="primary" class="bt-download"><nb-icon icon="cloud-download-outline"></nb-icon></button>
+                </div>
+            </div>
+            <div class="row row-upload">
+                <div class="col-md-2" style="align-self: center;">
+                    Upload Excel Product
+                </div>
+                <div class="col-md-4 row">
+                    <span style="align-self: center;">:&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <input nbInput fieldSize="small" type="text" placeholder="Browse file" class="tf-upload"/>
+                    <button nbButton size="small" status="primary" class="bt-upload"><nb-icon icon="cloud-upload-outline"></nb-icon></button>
+                </div>
+            </div>
+        </nb-card-body>
+      </nb-card>
+    </nb-card-back>
+  </nb-flip-card>
+  
+  
+
+<ng-template #dialog let-data let-ref="dialogRef">
+    <nb-card style="width: 1200px; height: 500px;">
+      <nb-card-header>{{dialogTitle}}</nb-card-header>
+      <nb-card-body style="overflow-x: hidden">
+      <form [formGroup]="formProduct" (ngSubmit)="onSubmit(saveAsType)">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Product Code <span style="color: red;">*</span></label>
+                    <nb-select fullWidth size="small" placeholder="Product Code" formControlName="productCode">
+                        <nb-option *ngFor="let loanType of loanTypes" [value]="loanType.productCode">{{loanType.productCode}} - {{loanType.productName}} </nb-option>
+                    </nb-select>
+                </div>
+                <div class="form-group">
+                    <label>Flag EIR <span style="color: red;">*</span></label>
+                    <nb-select fullWidth size="small" placeholder="Flag EIR" formControlName="flagEir">
+                        <nb-option *ngFor="let flagEir of flagEirs" [value]="flagEir">{{flagEir}}</nb-option>
+                    </nb-select>
+                </div>
+                <div class="form-group">
+                    <label>Prepayment Month <span style="color: red;">*</span></label>
+                    <input type="number" nbInput formControlName="prepaymentMonth" fullWidth placeholder="Prepayment Month" fieldSize="small">
+                </div>
+                <div class="form-group">
+                    <label>Market Rate (%) <span style="color: red;">*</span></label>
+                    <input type="number" nbInput formControlName="marketRate" fullWidth placeholder="Market Rate" fieldSize="small">
+                </div>
+                <div class="form-group">
+                    <label>Spread Rate (%)</label>
+                    <input type="number" nbInput formControlName="spreadRate" fullWidth placeholder="Spread Rate" fieldSize="small">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <nb-card>
+                    <nb-card-body>
+                        <div class="form-group">
+                            <label>GL Income Amortize - Debit</label>
+                            <nb-select formControlName="glIncomeAmortizeDebit" fullWidth size="small">
+                                <nb-option *ngFor="let coa of filterCoas(formProduct.controls['glIncomeAmortizeDebit'].value)" [value]="coa.glCode">{{coa.glCode}} - {{coa.glName}} </nb-option>
+                            </nb-select>
+                        </div>
+                        <div class="form-group">
+                            <label>GL Income Amortize - Credit</label>
+                            <nb-select formControlName="glIncomeAmortizeCredit" fullWidth size="small">
+                                <nb-option *ngFor="let coa of filterCoas(formProduct.controls['glIncomeAmortizeCredit'].value)" [value]="coa.glCode">{{coa.glCode}} - {{coa.glName}} </nb-option>
+                            </nb-select>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+                <nb-card>
+                    <nb-card-body>
+                        <div class="form-group">
+                            <label>GL Expense Amortize - Debit</label>
+                            <nb-select formControlName="glExpenseAmortizeDebit" fullWidth size="small">
+                                <nb-option *ngFor="let coa of filterCoas(formProduct.controls['glExpenseAmortizeDebit'].value)" [value]="coa.glCode">{{coa.glCode}} - {{coa.glName}} </nb-option>
+                            </nb-select>
+                        </div>
+                        <div class="form-group">
+                            <label>GL Expense Amortize - Credit</label>
+                            <nb-select formControlName="glExpenseAmortizeCredit" fullWidth size="small">
+                                <nb-option *ngFor="let coa of filterCoas(formProduct.controls['glExpenseAmortizeCredit'].value)" [value]="coa.glCode">{{coa.glCode}} - {{coa.glName}} </nb-option>
+                            </nb-select>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+                <nb-card>
+                    <nb-card-body>
+                        <div class="form-group">
+                            <label>GL Uder Market Amortize - Debit</label>
+                            <nb-select formControlName="glUmrateAmortizeDebit" fullWidth size="small">
+                                <nb-option *ngFor="let coa of filterCoas(formProduct.controls['glUmrateAmortizeDebit'].value)" [value]="coa.glCode">{{coa.glCode}} - {{coa.glName}} </nb-option>
+                            </nb-select>
+                        </div>
+                        <div class="form-group">
+                            <label>GL Uder Market Amortize - Credit</label>
+                            <nb-select formControlName="glUmrateAmortizeCredit" fullWidth size="small">
+                                <nb-option *ngFor="let coa of filterCoas(formProduct.controls['glUmrateAmortizeCredit'].value)" [value]="coa.glCode">{{coa.glCode}} - {{coa.glName}} </nb-option>
+                            </nb-select>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+                <nb-card>
+                    <nb-card-body>
+                        <div class="form-group">
+                            <label>GL Delta Amortize - Debit</label>
+                            <nb-select formControlName="glDeltaAmortizeDebit" fullWidth size="small">
+                                <nb-option *ngFor="let coa of filterCoas(formProduct.controls['glDeltaAmortizeDebit'].value)" [value]="coa.glCode">{{coa.glCode}} - {{coa.glName}} </nb-option>
+                            </nb-select>
+                        </div>
+                        <div class="form-group">
+                            <label>GL Delta Amortize - Credit</label>
+                            <nb-select formControlName="glDeltaAmortizeCredit" fullWidth size="small">
+                                <nb-option *ngFor="let coa of filterCoas(formProduct.controls['glDeltaAmortizeCredit'].value)" [value]="coa.glCode">{{coa.glCode}} - {{coa.glName}} </nb-option>
+                            </nb-select>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+                <nb-card>
+                    <nb-card-body>
+                        <div class="form-group">
+                            <label>GL ECL Collective - Debit</label>
+                            <nb-select formControlName="glEclCollectiveDebit" fullWidth size="small">
+                                <nb-option *ngFor="let coa of filterCoas(formProduct.controls['glEclCollectiveDebit'].value)" [value]="coa.glCode">{{coa.glCode}} - {{coa.glName}} </nb-option>
+                            </nb-select>
+                        </div>
+                        <div class="form-group">
+                            <label>GL ECL Collective - Credit</label>
+                            <nb-select formControlName="glEclCollectiveCredit" fullWidth size="small">
+                                <nb-option *ngFor="let coa of filterCoas(formProduct.controls['glEclCollectiveCredit'].value)" [value]="coa.glCode">{{coa.glCode}} - {{coa.glName}} </nb-option>
+                            </nb-select>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+            <div class="col-md-4">
+                <nb-card>
+                    <nb-card-body>
+                        <div class="form-group">
+                            <label>GL Reversal ECL Collective - Debit</label>
+                            <nb-select formControlName="glReversalEclCollectiveDebit" fullWidth size="small">
+                                <nb-option *ngFor="let coa of filterCoas(formProduct.controls['glReversalEclCollectiveDebit'].value)" [value]="coa.glCode">{{coa.glCode}} - {{coa.glName}} </nb-option>
+                            </nb-select>
+                        </div>
+                        <div class="form-group">
+                            <label>GL Reversal ECL Collective - Credit</label>
+                            <nb-select formControlName="glReversalEclCollectiveCredit" fullWidth size="small">
+                                <nb-option *ngFor="let coa of filterCoas(formProduct.controls['glReversalEclCollectiveCredit'].value)" [value]="coa.glCode">{{coa.glCode}} - {{coa.glName}} </nb-option>
+                            </nb-select>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+                <nb-card>
+                    <nb-card-body>
+                        <div class="form-group">
+                            <label>GL Unwinding Collective - Debit</label>
+                            <nb-select formControlName="glUnwindingCollectiveDebit" fullWidth size="small">
+                                <nb-option *ngFor="let coa of filterCoas(formProduct.controls['glUnwindingCollectiveDebit'].value)" [value]="coa.glCode">{{coa.glCode}} - {{coa.glName}} </nb-option>
+                            </nb-select>
+                        </div>
+                        <div class="form-group">
+                            <label>GL Unwinding Collective - Credit</label>
+                            <nb-select formControlName="glUnwindingCollectiveCredit" fullWidth size="small">
+                                <nb-option *ngFor="let coa of filterCoas(formProduct.controls['glUnwindingCollectiveCredit'].value)" [value]="coa.glCode">{{coa.glCode}} - {{coa.glName}} </nb-option>
+                            </nb-select>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+                <nb-card>
+                    <nb-card-body>
+                        <div class="form-group">
+                            <label>GL ECL Individual - Debit</label>
+                            <nb-select formControlName="glEclIndividualDebit" fullWidth size="small">
+                                <nb-option *ngFor="let coa of filterCoas(formProduct.controls['glEclIndividualDebit'].value)" [value]="coa.glCode">{{coa.glCode}} - {{coa.glName}} </nb-option>
+                            </nb-select>
+                        </div>
+                        <div class="form-group">
+                            <label>GL ECL Individual - Credit</label>
+                            <nb-select formControlName="glEclIndividualCredit" fullWidth size="small">
+                                <nb-option *ngFor="let coa of filterCoas(formProduct.controls['glEclIndividualCredit'].value)" [value]="coa.glCode">{{coa.glCode}} - {{coa.glName}} </nb-option>
+                            </nb-select>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+                <nb-card>
+                    <nb-card-body>
+                        <div class="form-group">
+                            <label>GL Reversal ECL Individual - Debit</label>
+                            <nb-select formControlName="glReversalEclIndividualDebit" fullWidth size="small">
+                                <nb-option *ngFor="let coa of filterCoas(formProduct.controls['glReversalEclIndividualDebit'].value)" [value]="coa.glCode">{{coa.glCode}} - {{coa.glName}} </nb-option>
+                            </nb-select>
+                        </div>
+                        <div class="form-group">
+                            <label>GL Reversal ECL Individual - Credit</label>
+                            <nb-select formControlName="glReversalEclIndividualCredit" fullWidth size="small">
+                                <nb-option *ngFor="let coa of filterCoas(formProduct.controls['glReversalEclIndividualCredit'].value)" [value]="coa.glCode">{{coa.glCode}} - {{coa.glName}} </nb-option>
+                            </nb-select>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+                <nb-card>
+                    <nb-card-body>
+                        <div class="form-group">
+                            <label>GL Unwinding Individual - Debit</label>
+                            <nb-select formControlName="glUnwindingIndividualDebit" fullWidth size="small">
+                                <nb-option *ngFor="let coa of filterCoas(formProduct.controls['glUnwindingIndividualDebit'].value)" [value]="coa.glCode">{{coa.glCode}} - {{coa.glName}} </nb-option>
+                            </nb-select>
+                        </div>
+                        <div class="form-group">
+                            <label>GL Unwinding Individual - Credit</label>
+                            <nb-select formControlName="glUnwindingIndividualCredit" fullWidth size="small">
+                                <nb-option *ngFor="let coa of filterCoas(formProduct.controls['glUnwindingIndividualCredit'].value)" [value]="coa.glCode">{{coa.glCode}} - {{coa.glName}} </nb-option>
+                            </nb-select>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+        </div>
+        <button nbButton type="button" (click)="onSubmit('approve')" status="primary" size="small">Approve</button>&nbsp;
+        <button nbButton type="button" (click)="onSubmit('reject')" size="small">Reject</button>
+      </form>
+      </nb-card-body>
+      <nb-card-footer>
+        <button nbButton (click)="ref.close(); resetForm()" size="small">Dismiss</button>
+      </nb-card-footer>
+    </nb-card>
+  </ng-template>
+
+

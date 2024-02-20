@@ -1,0 +1,14 @@
+<nb-card style="width: 500px" >
+  <nb-card-header>{{ title }}</nb-card-header>
+  <nb-card-body>
+      <div class="fs-3" >
+          {{ message }}
+      </div>
+  </nb-card-body>
+  <nb-card-footer>
+      <div class="buttons d-flex justify-content-around">
+          <button nbButton status="success" (click)="save_as_draft()">save as draft</button>
+          <button nbButton status="success" (click)="send_to_approver()">send to approver</button>
+      </div>
+  </nb-card-footer>
+</nb-card>

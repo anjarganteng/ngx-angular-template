@@ -1,0 +1,24 @@
+<!-- <nb-card size="small">
+    <nb-card-header>{{ title }}</nb-card-header>
+    <nb-card-body>
+        {{ message }}
+        <div class="buttons">
+            <button nbButton status="danger" (click)="cancel()">Cancel</button>
+            <button nbButton status="success" (click)="confirm()">Confirm</button>
+        </div>
+    </nb-card-body>
+  </nb-card> -->
+  <nb-card style="width: 500px" >
+    <nb-card-header>{{ title }}</nb-card-header>
+    <nb-card-body>
+        <div class="fs-3" >
+            {{ message }}
+        </div>
+    </nb-card-body>
+    <nb-card-footer>
+        <div class="buttons d-flex justify-content-around">
+            <button nbButton status="success" (click)="confirm()">Confirm</button>
+            <button nbButton status="danger" (click)="dismiss()">Cancel</button>
+        </div>
+    </nb-card-footer>
+  </nb-card>
